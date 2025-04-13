@@ -1,19 +1,14 @@
-package main
+# Use the official Golang base image
+FROM golang:1.20
 
-import (
-    "fmt"
-    "net/http"
-    "time"
-)
+# Set working directory
+WORKDIR /app
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    currentTime := time.Now().Format("Monday, 02-Jan-2006 15:04:05 MST")
-    fmt.Fprintf(w, "<h1>Current Date and Time</h1><p>%s</p>", currentTime)
-}
+# Copy go app
+COPY main.go .
 
-func main() {
-    http.HandleFunc("/", handler)
-    fmt.Println("Starting server on :8080...")
-    http.ListenAndServe(":8080", nil)
-}
+# Build Go app
+RUN go build -o app .
 
+# Run the executable
+CMD ["./app"]
